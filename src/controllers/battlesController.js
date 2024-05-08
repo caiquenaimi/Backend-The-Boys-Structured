@@ -1,50 +1,5 @@
 const pool = require("../config/dbConfig")
-
-async function updateWinsCounter(heroId) {
-    try {
-        const result = await pool.query(
-            "UPDATE heroes SET winscounter = COALESCE(winscounter, 0) + 1 WHERE id = $1 RETURNING winscounter",
-            [heroId]
-        );
-        return result.rows[0].winscounter;
-    } catch (error) {
-        console.error("Erro ao atualizar winscounter", error);
-        throw error;
-    }
-}
-
-async function CalcWinner(hero1, hero2) {
-    const hero1Power = hero1.power * hero1.health;
-    const hero2Power = hero2.power * hero2.health;
-
-    let winner, loser;
-
-    if (hero1Power > hero2Power) {
-        winner = hero1;
-        loser = hero2;
-    } else {
-        winner = hero2;
-        loser = hero1;
-    }
-
-    try {
-        await updateWinsCounter(winner.id);
-        winner.level++;
-        await pool.query("UPDATE heroes SET level = $1 WHERE id = $2", [
-            winner.level,
-            winner.id,
-        ]);
-        await pool.query("UPDATE heroes SET level = $1 WHERE id = $2", [
-            loser.level,
-            loser.id,
-        ]);
-        return winner;
-    } catch (error) {
-        console.error("Erro ao atualizar vencedor", error);
-        throw error;
-    }
-}
-
+const CalcWinner = require("../models/calcWinner.js")
 async function createBattle(req, res) {
     try {
         const { hero1Id, hero2Id } = req.body;
