@@ -1,6 +1,5 @@
 const pool = require("../config/dbConfig")
 
-
 async function getAllheroes(req, res) {
     try {
         const result = await pool.query(`

@@ -1,3 +1,5 @@
+const pool = require("../config/dbConfig")
+
 async function updateWinsCounter(heroId) {
     try {
         const result = await pool.query(
