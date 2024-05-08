@@ -1,3 +1,4 @@
+const pool = require("../config/dbConfig")
 const UpdateWinsCounter = require("../models/updateWinsCounter.js")
 
 async function CalcWinner(hero1, hero2) {
