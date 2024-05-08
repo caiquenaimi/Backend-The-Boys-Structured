@@ -39,6 +39,7 @@ O projeto segue uma arquitetura de pastas comum para aplicações Node.js, onde 
 - `controllers`: Contém os controladores da aplicação, responsáveis por definir a lógica de negócios e manipular as requisições HTTP.
 - `routes`: Contém os arquivos de roteamento da aplicação, onde as rotas da API são definidas e configuradas.
 - `db`: Contém os scripts e configurações relacionados ao banco de dados, como migrações, seeds e configuração de conexão.
+- `models`: Contém os modelos de dados da aplicação, que definem a estrutura das entidades manipuladas pelo sistema.
 - `config`: Contém arquivos de configuração da aplicação, como configurações de banco de dados ou variáveis de ambiente.
 - `index.js`: O ponto de entrada da aplicação, onde o servidor Express é configurado e inicializado.
 
