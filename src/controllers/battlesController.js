@@ -88,25 +88,25 @@ async function createBattle(req, res) {
 async function getAllBattles(req, res) {
     try {
         const result = await pool.query(`
-              SELECT battles.id, 
-                     battles.winner_id, 
-                     battles.loser_id, 
-                     winner.name AS winner_name, 
-                     winner.skill AS winner_skill,
-                     winner.power AS winner_power,
-                     winner.level AS winner_level,
-                     winner.health AS winner_health,
-                     winner.winscounter AS winner_winscounter,
-                     loser.name AS loser_name, 
-                     loser.skill AS loser_skill,
-                     loser.power AS loser_power,
-                     loser.level AS loser_level,
-                     loser.health AS loser_health,
-                     loser.winscounter AS loser_winscounter
-              FROM battles
-              INNER JOIN heroes AS winner ON battles.winner_id = winner.id
-              INNER JOIN heroes AS loser ON battles.loser_id = loser.id
-          `);
+            SELECT battles.id, 
+                   battles.winner_id, 
+                   battles.loser_id, 
+                   winner.name AS winner_name, 
+                   winner.skill AS winner_skill,
+                   winner.power AS winner_power,
+                   winner.level AS winner_level,
+                   winner.health AS winner_health,
+                   winner.winscounter AS winner_winscounter,
+                   loser.name AS loser_name, 
+                   loser.skill AS loser_skill,
+                   loser.power AS loser_power,
+                   loser.level AS loser_level,
+                   loser.health AS loser_health,
+                   loser.winscounter AS loser_winscounter
+            FROM battles
+            INNER JOIN heroes AS winner ON battles.winner_id = winner.id
+            INNER JOIN heroes AS loser ON battles.loser_id = loser.id
+        `);
         res.json({
             status: "success",
             message: "Lista de batalhas",
@@ -120,6 +120,54 @@ async function getAllBattles(req, res) {
             message: "Erro ao buscar batalhas",
         });
     }
-};
+}
 
-module.exports = { createBattle, getAllBattles };
+async function getBattlesByHero(req, res) {
+    try {
+        const { name } = req.params;
+        const result = await pool.query(`
+            SELECT battles.id, 
+                   battles.winner_id, 
+                   battles.loser_id, 
+                   winner.name AS winner_name, 
+                   winner.skill AS winner_skill,
+                   winner.power AS winner_power,
+                   winner.level AS winner_level,
+                   winner.health AS winner_health,
+                   winner.winscounter AS winner_winscounter,
+                   loser.name AS loser_name, 
+                   loser.skill AS loser_skill,
+                   loser.power AS loser_power,
+                   loser.level AS loser_level,
+                   loser.health AS loser_health,
+                   loser.winscounter AS loser_winscounter
+            FROM battles
+            INNER JOIN heroes AS winner ON battles.winner_id = winner.id
+            INNER JOIN heroes AS loser ON battles.loser_id = loser.id
+            WHERE LOWER(winner.name) LIKE $1 OR LOWER(loser.name) LIKE $1
+        `, [`%${name.toLowerCase()}%`]);
+
+        if (result.rowCount === 0) {
+            res.json({
+                status: "error",
+                message: `Heroi com nome ${name} não encontrado`,
+            });
+        }
+
+        res.json({
+            status: "success",
+            message: "Herois encontrados",
+            heroes: result.rows,
+        });
+    } catch (error) {
+        console.error("Erro ao buscar heroi", error);
+        res.status(500).send({
+            status: "error",
+            message: "Erro ao buscar heroi",
+        });
+    }
+}
+
+
+
+module.exports = { createBattle, getAllBattles, getBattlesByHero };
