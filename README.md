@@ -74,6 +74,7 @@ O servidor será iniciado na porta 3000 por padrão.
 
 
 - **GET /battles:** Retorna o histórico de batalhas.
+- **GET /battles/:name** Retorna o histórico de batalhas do heroi com o nome especificado.
 - **POST /battles:** Realiza uma batalha entre dois herois utilzando seus IDs.
 
 ## Testando as Rotas 
