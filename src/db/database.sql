@@ -3,6 +3,7 @@ CREATE DATABASE theboys;
 CREATE TABLE heroes (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
+    image VARCHAR(100) NOT NULL,
     skill VARCHAR(100) NOT NULL,
     power INT NOT NULL,
     level SMALLINT NOT NULL,
